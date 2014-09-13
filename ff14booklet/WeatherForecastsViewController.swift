@@ -9,6 +9,7 @@
 import UIKit
 
 class WeatherForecastsViewController: UITableViewController {
+    var weatherForecast: WeatherForecast? = nil
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -21,75 +22,108 @@ class WeatherForecastsViewController: UITableViewController {
         let cloudIcon = FAKFoundationIcons.cloudIconWithSize(TabBarItemIconFontSize)
         let iconImage = cloudIcon.imageWithSize(TabBarItemIconImageSize)
         self.tabBarItem = UITabBarItem(title: "天気予報", image: iconImage, selectedImage: iconImage);
+
+        self.reloadForecast()
+    }
+
+    func reloadForecast() {
+        let apiURL = NSURL(string: "https://www.kimonolabs.com/api/b33o6f7q?apikey=mELUT549EVbW77V9w9nwoMd6gt5KPbbe")
+        NSURLSession.sharedSession().dataTaskWithURL(apiURL, completionHandler: {
+            (data, response, error) in
+            if error != nil {
+                return
+            }
+
+            self.parseForecast(JSONValue(data))
+
+            dispatch_async(dispatch_get_main_queue(), {
+                self.tableView.reloadData()
+                self.navigationItem.title = self.weatherForecast?.info.date
+            })
+        }).resume()
+    }
+
+    func parseForecast(data: JSONValue) {
+        func createWeatherForecastLocation(locationData: JSONValue) -> WeatherForecastLocation {
+            let title = locationData["title"].string!
+
+            var weathers: [Weather] = []
+            for i in 1...4 {
+                if let weatherTitle = locationData["forecast\(i)_title"].string {
+                    if countElements(weatherTitle) > 0 {
+                        weathers.append(Weather(title: weatherTitle, imageURL: locationData["forecast\(i)_image"].url))
+                    }
+                } else {
+                    weathers.append(Weather())
+                }
+            }
+            return WeatherForecastLocation(title: title, forecasts: weathers)
+        }
+
+        func createWeatherForecastInfo(metaData: JSONValue) -> WeatherForecastInfo {
+            let date = metaData["date"].string!
+            var forecastDates: [String] = []
+            for i in 1...4 {
+                if let forecastDate = metaData["forecast\(i)_date"].string {
+                    forecastDates.append(forecastDate)
+                }
+            }
+            return WeatherForecastInfo(date: date, forecastDates: forecastDates)
+        }
+
+        var forecastInfo: WeatherForecastInfo? = nil
+        let metaData = data["results"]["meta"].first!
+        if metaData {
+            switch metaData {
+            case .JObject:
+                forecastInfo = createWeatherForecastInfo(metaData)
+            case .JInvalid(let error):
+                println(error)
+                return
+            default:
+                return
+            }
+        }
+
+        var locations: [WeatherForecastLocation]? = nil
+        let locationsData = data["results"]["locations"]
+        if locationsData {
+            switch locationsData {
+            case .JArray:
+                locations = locationsData.array!.map { (locationData: JSONValue) -> WeatherForecastLocation in
+                    return createWeatherForecastLocation(locationData)
+                }
+            case .JInvalid(let error):
+                println(error)
+                return
+            default:
+                return
+            }
+        }
+
+        self.weatherForecast = WeatherForecast(info: forecastInfo!, locations: locations!)
     }
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
-        // #warning Potentially incomplete method implementation.
-        // Return the number of sections.
-        return 0
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
     }
 
-    override func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
-        return 0
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.weatherForecast != nil {
+            return self.weatherForecast!.locations.count
+        } else {
+            return 0
+        }
     }
 
-    /*
-    override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as UITableViewCell
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("WeatherForecastLocation", forIndexPath: indexPath) as UITableViewCell
 
-        // Configure the cell...
+        let location = self.weatherForecast!.locations[indexPath.row]
+        cell.textLabel?.text = location.title
 
         return cell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView!, canEditRowAtIndexPath indexPath: NSIndexPath!) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView!, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath!) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView!, moveRowAtIndexPath fromIndexPath: NSIndexPath!, toIndexPath: NSIndexPath!) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView!, canMoveRowAtIndexPath indexPath: NSIndexPath!) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

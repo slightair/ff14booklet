@@ -20,6 +20,9 @@ class FirstViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    func tabBarItemImage() -> UIImage {
+        let cloudIcon = FAKFoundationIcons.cloudIconWithSize(TabBarItemIconFontSize)
+        return cloudIcon.imageWithSize(TabBarItemIconImageSize)
+    }
 }
 

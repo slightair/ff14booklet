@@ -14,6 +14,7 @@
 		575372A719C44923009069BC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 575372A619C44923009069BC /* Images.xcassets */; };
 		575372AA19C44923009069BC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 575372A819C44923009069BC /* LaunchScreen.xib */; };
 		575372B619C44923009069BC /* ff14bookletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575372B519C44923009069BC /* ff14bookletTests.swift */; };
+		575372C419C44A6A009069BC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575372C319C44A6A009069BC /* TabBarController.swift */; };
 		AF4B44A5290747AF9AFC730B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D35A1F8A19A247998740F13D /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		575372B419C44923009069BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		575372B519C44923009069BC /* ff14bookletTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ff14bookletTests.swift; sourceTree = "<group>"; };
 		575372BF19C449F5009069BC /* ff14booklet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ff14booklet-Bridging-Header.h"; sourceTree = "<group>"; };
+		575372C319C44A6A009069BC /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		D35A1F8A19A247998740F13D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A37B1737284FE4B69BA8BF /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,6 +96,7 @@
 				575372A819C44923009069BC /* LaunchScreen.xib */,
 				5753729B19C44923009069BC /* Supporting Files */,
 				575372BF19C449F5009069BC /* ff14booklet-Bridging-Header.h */,
+				575372C319C44A6A009069BC /* TabBarController.swift */,
 			);
 			path = ff14booklet;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				575372A219C44923009069BC /* SecondViewController.swift in Sources */,
+				575372C419C44A6A009069BC /* TabBarController.swift in Sources */,
 				5753729E19C44923009069BC /* AppDelegate.swift in Sources */,
 				575372A019C44923009069BC /* FirstViewController.swift in Sources */,
 			);

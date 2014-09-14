@@ -27,7 +27,7 @@ class WeatherForecastsViewController: UITableViewController {
     }
 
     func reloadForecast() {
-        let apiURL = NSURL(string: "https://www.kimonolabs.com/api/b33o6f7q?apikey=mELUT549EVbW77V9w9nwoMd6gt5KPbbe")
+        let apiURL = NSURL(string: "http://ff14angler.com/skywatcher.php")
         NSURLSession.sharedSession().dataTaskWithURL(apiURL, completionHandler: {
             (data, response, error) in
             if error != nil {
@@ -38,60 +38,31 @@ class WeatherForecastsViewController: UITableViewController {
 
             dispatch_async(dispatch_get_main_queue(), {
                 self.tableView.reloadData()
-                self.navigationItem.title = self.weatherForecast?.info.date
+                self.navigationItem.title = self.weatherForecast?.date
             })
         }).resume()
     }
 
     func parseForecast(data: JSONValue) {
-        func createWeatherForecastLocation(locationData: JSONValue) -> WeatherForecastLocation {
-            let title = locationData["title"].string!
+        let date = String(format: "ET %02d:%02d (残り時間 %02d:%02d)", arguments: [data["hour"].integer!, data["minute"].integer!, data["left_hour"].integer!, data["left_minute"].integer!])
 
-            var weathers: [Weather] = []
-            for i in 1...4 {
-                if let weatherTitle = locationData["forecast\(i)_title"].string {
-                    if countElements(weatherTitle) > 0 {
-                        weathers.append(Weather(title: weatherTitle, imageURL: locationData["forecast\(i)_image"].url))
-                    }
-                } else {
-                    weathers.append(Weather())
-                }
-            }
-            return WeatherForecastLocation(title: title, forecasts: weathers)
+        var locations = Location.allValues.map { (location: Location) -> WeatherForecastLocation in
+            return WeatherForecastLocation(location: location, forecasts: [Weather](count: 4, repeatedValue: Weather.不明))
         }
 
-        func createWeatherForecastInfo(metaData: JSONValue) -> WeatherForecastInfo {
-            let date = metaData["date"].string!
-            var forecastDates: [String] = []
-            for i in 1...4 {
-                if let forecastDate = metaData["forecast\(i)_date"].string {
-                    forecastDates.append(forecastDate)
-                }
-            }
-            return WeatherForecastInfo(date: date, forecastDates: forecastDates)
-        }
-
-        var forecastInfo: WeatherForecastInfo? = nil
-        let metaData = data["results"]["meta"].first!
-        if metaData {
-            switch metaData {
-            case .JObject:
-                forecastInfo = createWeatherForecastInfo(metaData)
-            case .JInvalid(let error):
-                println(error)
-                return
-            default:
-                return
-            }
-        }
-
-        var locations: [WeatherForecastLocation]? = nil
-        let locationsData = data["results"]["locations"]
-        if locationsData {
-            switch locationsData {
+        let forecasts = data["data"]
+        if forecasts {
+            switch forecasts {
             case .JArray:
-                locations = locationsData.array!.map { (locationData: JSONValue) -> WeatherForecastLocation in
-                    return createWeatherForecastLocation(locationData)
+                for forecast: JSONValue in forecasts.array! {
+                    let time = forecast["time"].integer!
+                    let area = forecast["area"].integer!
+                    let location = Location.fromRaw(area)
+                    let weather = Weather.fromRaw(forecast["weather"].integer!)
+
+                    var newForecasts = locations[area - 1].forecasts
+                    newForecasts[time] = weather!
+                    locations[area - 1] = WeatherForecastLocation(location: location!, forecasts: newForecasts)
                 }
             case .JInvalid(let error):
                 println(error)
@@ -101,7 +72,7 @@ class WeatherForecastsViewController: UITableViewController {
             }
         }
 
-        self.weatherForecast = WeatherForecast(info: forecastInfo!, locations: locations!)
+        self.weatherForecast = WeatherForecast(date: date, locations: locations)
     }
 
     // MARK: - Table view data source

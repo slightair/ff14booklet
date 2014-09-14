@@ -20,18 +20,17 @@ class WeatherForecastLocationCell: UITableViewCell {
     @IBOutlet var forecastLabel4: UILabel!
 
     func updateWithLocation(location: WeatherForecastLocation) {
-        self.locationLabel.text = location.title
+        self.locationLabel.text = location.location.title()
 
         for i in 1...4 {
             let imageView = self.valueForKey("forecastImageView\(i)") as? UIImageView
             let label = self.valueForKey("forecastLabel\(i)") as? UILabel
+            let weather = location.forecasts[i - 1]
 
-            if location.forecasts.count > (i - 1) {
-                let forecast = location.forecasts[i - 1]
-                label?.text = forecast.title
-                imageView?.sd_setImageWithURL(forecast.imageURL)
+            label?.text = weather.title()
+            if let imageURL = weather.imageURL() {
+                imageView?.sd_setImageWithURL(imageURL)
             } else {
-                label?.text = "未測定"
                 imageView?.image = nil
             }
         }

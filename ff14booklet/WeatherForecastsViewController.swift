@@ -23,14 +23,15 @@ class WeatherForecastsViewController: UITableViewController {
         let iconImage = cloudIcon.imageWithSize(TabBarItemIconImageSize)
         self.tabBarItem = UITabBarItem(title: "天気予報", image: iconImage, selectedImage: iconImage);
 
-        self.reloadForecast()
+        self.reloadForecast(nil)
     }
 
-    func reloadForecast() {
+    func reloadForecast(completion: ((NSError?) -> Void)?) {
         let apiURL = NSURL(string: "http://ff14angler.com/skywatcher.php")
         NSURLSession.sharedSession().dataTaskWithURL(apiURL, completionHandler: {
             (data, response, error) in
             if error != nil {
+                completion?(error)
                 return
             }
 
@@ -39,6 +40,8 @@ class WeatherForecastsViewController: UITableViewController {
             dispatch_async(dispatch_get_main_queue(), {
                 self.tableView.reloadData()
                 self.navigationItem.title = self.weatherForecast?.date
+
+                completion?(nil)
             })
         }).resume()
     }
@@ -73,6 +76,18 @@ class WeatherForecastsViewController: UITableViewController {
         }
 
         self.weatherForecast = WeatherForecast(date: date, locations: locations)
+    }
+
+    @IBAction func didRequestRefresh(sender: AnyObject) {
+        let refreshControl = sender as UIRefreshControl
+        refreshControl.beginRefreshing()
+
+        self.reloadForecast({
+            (error) in
+            if (refreshControl.refreshing) {
+                refreshControl.endRefreshing()
+            }
+        })
     }
 
     // MARK: - Table view data source

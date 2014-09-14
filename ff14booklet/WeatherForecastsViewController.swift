@@ -119,10 +119,10 @@ class WeatherForecastsViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("WeatherForecastLocation", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("WeatherForecastLocation", forIndexPath: indexPath) as WeatherForecastLocationCell
 
         let location = self.weatherForecast!.locations[indexPath.row]
-        cell.textLabel?.text = location.title
+        cell.updateWithLocation(location)
 
         return cell
     }

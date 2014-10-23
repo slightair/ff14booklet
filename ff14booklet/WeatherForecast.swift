@@ -35,7 +35,7 @@ enum Weather: Int {
         case .不明:
             return nil
         default:
-            return NSURL(string: String(format: "http://ff14angler.com/img/w%03d.png", toRaw()))
+            return NSURL(string: String(format: "http://ff14angler.com/img/w%03d.png", rawValue))
         }
     }
 

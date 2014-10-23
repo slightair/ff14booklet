@@ -28,7 +28,7 @@ class WeatherForecastsViewController: UITableViewController {
 
     func reloadForecast(completion: ((NSError?) -> Void)?) {
         let apiURL = NSURL(string: "http://ff14angler.com/skywatcher.php")
-        NSURLSession.sharedSession().dataTaskWithURL(apiURL, completionHandler: {
+        NSURLSession.sharedSession().dataTaskWithURL(apiURL!, completionHandler: {
             (data, response, error) in
             if error != nil {
                 completion?(error)
@@ -60,8 +60,8 @@ class WeatherForecastsViewController: UITableViewController {
                 for forecast: JSONValue in forecasts.array! {
                     let time = forecast["time"].integer!
                     let area = forecast["area"].integer!
-                    let location = Location.fromRaw(area)
-                    let weather = Weather.fromRaw(forecast["weather"].integer!)
+                    let location = Location(rawValue:area)
+                    let weather = Weather(rawValue:forecast["weather"].integer!)
 
                     var newForecasts = locations[area - 1].forecasts
                     newForecasts[time] = weather!

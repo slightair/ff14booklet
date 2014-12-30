@@ -2,16 +2,31 @@ package cc.clv.ff14booklet;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 public class MainActivity extends Activity {
+    private RecyclerView mFishListView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mFishListView = (RecyclerView)findViewById(R.id.fish_list_view);
+        mFishListView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mFishListView.setLayoutManager(mLayoutManager);
+
+        String[] dataset = {"aaa", "bbb", "ccc"};
+        mAdapter = new FishListAdapter(dataset);
+        mFishListView.setAdapter(mAdapter);
     }
 
 

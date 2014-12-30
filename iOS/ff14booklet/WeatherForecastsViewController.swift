@@ -35,7 +35,7 @@ class WeatherForecastsViewController: UITableViewController {
                 return
             }
 
-            self.parseForecast(JSONValue(data))
+            self.parseForecast(JSON(data: data))
 
             dispatch_async(dispatch_get_main_queue(), {
                 self.tableView.reloadData()
@@ -46,32 +46,23 @@ class WeatherForecastsViewController: UITableViewController {
         }).resume()
     }
 
-    func parseForecast(data: JSONValue) {
-        let date = String(format: "ET %02d:%02d (残り時間 %02d:%02d)", arguments: [data["hour"].integer!, data["minute"].integer!, data["left_hour"].integer!, data["left_minute"].integer!])
+    func parseForecast(data: JSON) {
+        let date = String(format: "ET %02d:%02d (残り時間 %02d:%02d)", arguments: [data["hour"].integerValue!, data["minute"].integerValue!, data["left_hour"].integerValue!, data["left_minute"].integerValue!])
 
         var locations = Location.allValues.map { (location: Location) -> WeatherForecastLocation in
             return WeatherForecastLocation(location: location, forecasts: [Weather](count: 4, repeatedValue: Weather.不明))
         }
 
-        let forecasts = data["data"]
-        if forecasts {
-            switch forecasts {
-            case .JArray:
-                for forecast: JSONValue in forecasts.array! {
-                    let time = forecast["time"].integer!
-                    let area = forecast["area"].integer!
-                    let location = Location(rawValue:area)
-                    let weather = Weather(rawValue:forecast["weather"].integer!)
+        if let forecasts = data["data"].arrayValue {
+            for forecast in forecasts {
+                let time = forecast["time"].integerValue! + 1
+                let area = forecast["area"].integerValue!
+                let location = Location(rawValue:area)
+                let weather = Weather(rawValue:forecast["weather"].integerValue!)
 
-                    var newForecasts = locations[area - 1].forecasts
-                    newForecasts[time] = weather!
-                    locations[area - 1] = WeatherForecastLocation(location: location!, forecasts: newForecasts)
-                }
-            case .JInvalid(let error):
-                println(error)
-                return
-            default:
-                return
+                var newForecasts = locations[area - 1].forecasts
+                newForecasts[time] = weather!
+                locations[area - 1] = WeatherForecastLocation(location: location!, forecasts: newForecasts)
             }
         }
 

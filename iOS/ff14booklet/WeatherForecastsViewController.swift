@@ -50,7 +50,7 @@ class WeatherForecastsViewController: UITableViewController {
         let date = String(format: "ET %02d:%02d (残り時間 %02d:%02d)", arguments: [data["hour"].integerValue!, data["minute"].integerValue!, data["left_hour"].integerValue!, data["left_minute"].integerValue!])
 
         var locations = Location.allValues.map { (location: Location) -> WeatherForecastLocation in
-            return WeatherForecastLocation(location: location, forecasts: [Weather](count: 4, repeatedValue: Weather.不明))
+            return WeatherForecastLocation(location: location, forecasts: [Weather](count: 5, repeatedValue: Weather.不明))
         }
 
         if let forecasts = data["data"].arrayValue {

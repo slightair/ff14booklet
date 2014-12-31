@@ -9,7 +9,7 @@ import android.widget.TextView;
  * Created by slightair on 2014/12/30.
  */
 public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewHolder> {
-    private String[] mDataset;
+    private FishDataSet mDataset;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTextView;
@@ -19,7 +19,7 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
         }
     }
 
-    public FishListAdapter(String[] dataset) {
+    public FishListAdapter(FishDataSet dataset) {
         mDataset = dataset;
     }
 
@@ -33,11 +33,12 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset[position]);
+        FishInfo fishInfo = mDataset.get(position);
+        holder.mTextView.setText(fishInfo.getName());
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
     }
 }

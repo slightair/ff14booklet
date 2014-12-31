@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">FF14Booklet</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="thumbnail_description">thumbnail</string>
     <string name="action_settings">Settings</string>
+    <string name="fish_type_normal"></string>
+    <string name="fish_type_spirit">ヌシ</string>
+    <string name="fish_type_super_spirit">オオヌシ</string>
 
 </resources>

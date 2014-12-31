@@ -17,6 +17,12 @@ import java.util.ArrayList;
 public class FishDataSet {
     private ArrayList<FishInfo> fishList;
 
+    public static enum FishTypes {
+        NORMAL,
+        SPIRIT,
+        SUPER_SPIRIT;
+    }
+
     public FishDataSet(Context context) {
         Gson gson = new Gson();
         InputStream inputStream = context.getResources().openRawResource(R.raw.fish);

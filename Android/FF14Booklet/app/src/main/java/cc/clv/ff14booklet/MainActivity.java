@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
         mFishListView.setLayoutManager(mLayoutManager);
 
         FishDataSet dataset = new FishDataSet(this);
-        mAdapter = new FishListAdapter(dataset);
+        mAdapter = new FishListAdapter(this, dataset);
         mFishListView.setAdapter(mAdapter);
     }
 

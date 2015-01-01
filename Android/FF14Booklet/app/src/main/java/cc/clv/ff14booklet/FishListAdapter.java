@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
@@ -27,8 +26,8 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
         public TextView mItemLevelView;
         public TextView mPatchView;
         public TextView mTypeView;
-        public ToggleButton mCompleteButton;
         public Button mLinkButton;
+        public TextView mCheckmarkView;
 
         public ViewHolder(View v) {
             super(v);
@@ -38,14 +37,11 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
             mItemLevelView = (TextView)v.findViewById(R.id.item_level_view);
             mPatchView = (TextView)v.findViewById(R.id.patch_view);
             mTypeView = (TextView)v.findViewById(R.id.type_view);
-            mCompleteButton = (ToggleButton)v.findViewById(R.id.complete_button);
             mLinkButton = (Button)v.findViewById(R.id.link_button);
-
-            mCompleteButton.setTextOn(String.valueOf((char)0xea10));
-            mCompleteButton.setTextOff(String.valueOf((char) 0xea11));
-            mCompleteButton.setChecked(false);
+            mCheckmarkView = (TextView)v.findViewById(R.id.checkmark_view);
 
             mLinkButton.setText(String.valueOf((char)0xe9cb));
+            mCheckmarkView.setText(String.valueOf((char)0xea10));
         }
     }
 
@@ -60,8 +56,8 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
         ViewHolder vh = new ViewHolder(v);
 
         Typeface typeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/IcoMoon-Free.ttf");
-        vh.mCompleteButton.setTypeface(typeFace);
         vh.mLinkButton.setTypeface(typeFace);
+        vh.mCheckmarkView.setTypeface(typeFace);
 
         return vh;
     }

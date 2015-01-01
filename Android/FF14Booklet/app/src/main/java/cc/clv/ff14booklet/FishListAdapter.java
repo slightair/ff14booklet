@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
  */
 public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewHolder> {
     private Context mContext;
-    private FishDataSet mDataset;
+    private FishDataSet mDataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView mThumbnailView;
@@ -45,9 +45,9 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
         }
     }
 
-    public FishListAdapter(Context context, FishDataSet dataset) {
+    public FishListAdapter(Context context, FishDataSet dataSet) {
         mContext = context;
-        mDataset = dataset;
+        mDataSet = dataSet;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        FishInfo fishInfo = mDataset.get(position);
+        FishInfo fishInfo = mDataSet.get(position);
 
         String thumbnailUrl = String.format("http://ff14angler.com/img/f%04d.png", fishInfo.getId());
         Picasso.with(mContext).load(thumbnailUrl).noFade().into(holder.mThumbnailView);
@@ -87,6 +87,6 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return mDataSet.size();
     }
 }

@@ -7,5 +7,7 @@
     <string name="fish_type_normal"></string>
     <string name="fish_type_spirit">ヌシ</string>
     <string name="fish_type_super_spirit">オオヌシ</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -1,10 +1,10 @@
 package cc.clv.ff14booklet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,14 +89,18 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
             @Override
             public void onClick(View v) {
                 String pageUrl = "http://ff14angler.com/fish/" + fishInfo.getId();
-                Log.d("aaa", pageUrl);
+
+                Intent intent = new Intent(mContext, WebViewActivity.class);
+                intent.putExtra("page_url", pageUrl);
+                intent.putExtra("fish_name", fishInfo.getName());
+                mContext.startActivity(intent);
             }
         });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView checkmarkView = (TextView)v.findViewById(R.id.checkmark_view);
+                TextView checkmarkView = (TextView) v.findViewById(R.id.checkmark_view);
                 int visibility = checkmarkView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE;
                 checkmarkView.setVisibility(visibility);
             }

@@ -6,8 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
@@ -31,14 +29,6 @@ public class MainActivity extends Activity {
         mAdapter = new FishListAdapter(this, mDataSet);
         mFishListView.setAdapter(mAdapter);
         mFishListView.addItemDecoration(new FishListItemDecoration(this));
-        mFishListView.addOnItemTouchListener(new FishListItemClickListener(this, new FishListItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                TextView checkmarkView = (TextView)view.findViewById(R.id.checkmark_view);
-                int visibility = checkmarkView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE;
-                checkmarkView.setVisibility(visibility);
-            }
-        }));
     }
 
 

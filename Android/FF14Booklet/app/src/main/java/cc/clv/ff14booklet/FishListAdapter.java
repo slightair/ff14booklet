@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        FishInfo fishInfo = mDataSet.get(position);
+        final FishInfo fishInfo = mDataSet.get(position);
 
         String thumbnailUrl = String.format("http://ff14angler.com/img/f%04d.png", fishInfo.getId());
         Picasso.with(mContext).load(thumbnailUrl).noFade().into(holder.mThumbnailView);
@@ -83,6 +84,23 @@ public class FishListAdapter extends RecyclerView.Adapter <FishListAdapter.ViewH
             typeString = resources.getString(R.string.fish_type_normal);
         }
         holder.mTypeView.setText(typeString);
+
+        holder.mLinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String pageUrl = "http://ff14angler.com/fish/" + fishInfo.getId();
+                Log.d("aaa", pageUrl);
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView checkmarkView = (TextView)v.findViewById(R.id.checkmark_view);
+                int visibility = checkmarkView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE;
+                checkmarkView.setVisibility(visibility);
+            }
+        });
     }
 
     @Override
